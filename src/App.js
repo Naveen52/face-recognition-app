@@ -1,59 +1,44 @@
-import React, { Component } from 'react';
 import logo from './logo.svg';
-import Particles from 'react-particles-js';
-import Navigation from './components/Navigation/Navigation';
-import Logo from './components/Logo/Logo';
-// import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
-// import Rank from './components/Rank/Rank';
-// import SignIn  from './components/SignIn/SignIn';
-import Register from './components/Register/Register';
 import './App.css';
+import Particles from 'react-particles-js'
 
-const particlesOptions = {
-  particles: {
-    number: {
-      value: 1000,
-      density: {
-        enable: true,
-        value_area: 2000
+// New imports
+
+import React, { Component } from 'react';
+import Navigation from './Components/Navigation/Navigation'
+import Logo from './Components/Logo/Logo'
+import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
+import Rank from './Components/Rank/Rank';
+import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
+import SignIn from './Components/SignIn/SignIn';
+import { render } from 'react-dom';
+import Register from './Components/Register/Register';
+
+const particleOptions = {
+  "particles": {
+    "number": {
+      "value": 100
+    },
+    "size": {
+      "value": 3
+    }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": {
+        "enable": true,
+        "mode": "repulse"
       }
     }
   }
 }
-
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      user: {
-        name: '',
-        email: '',
-        password: '',
-      }
+      route: 'signIn',
+      isSignedIn: false
     }
-  }
-  loadUser = (data) => {
-    this.setState({
-      user: {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        entries: data.entries,
-        joined: data.joined
-      }
-    })
-  }
-
-  onInputChange = (event) => {
-    this.setState({ input: event.target.value })
-  }
-
-  onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input })
   }
   onRouteChange = (route) => {
     if (route === 'signout') {
@@ -63,22 +48,28 @@ class App extends Component {
     }
     this.setState({ route: route });
   }
+
   render() {
     return (
-      <div className="App">
-        <Particles className="particle" />
-        <Navigation />
-        <div>
-          <Logo />
-          {/* <SignIn /> */}
-         
-          <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
-          {/* <Rank /> */}
-          {/* <Register /> */}
-        </div>
+      <div className='App'>
+        <Particles className='particles' params={particleOptions} />
+        <Navigation isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange} />
+        {this.state.route === 'home' ?
+          <div>
+            <Logo />
+            <Rank />
+            <ImageLinkForm />
+            <FaceRecognition />
+          </div>
+          : (this.state.route === 'signIn' ?
+            <SignIn onRouteChange={this.onRouteChange} />
+            : <Register onRouteChange={this.onRouteChange} />)
+
+        }
+
+
       </div>
     )
-  };
+  }
 }
-
 export default App;
