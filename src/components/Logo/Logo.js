@@ -11,7 +11,6 @@ const Logo = () => {
                     <img alt='logo' src={brain} />
                 </div>
             </Tilt>
-
         </div>
     )
 };
